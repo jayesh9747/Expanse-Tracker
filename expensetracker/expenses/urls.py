@@ -5,9 +5,9 @@ from django.views.generic import TemplateView
 urlpatterns= [
     path('', TemplateView.as_view(template_name='dashboard/home.html'), name='home'),
     path('expenses/',views.get_expenses),
-    path('income_source/', TemplateView.as_view(template_name='dashboard/incomesource.html'), name='income_sources_list'),
-    path('income_source/edit/<int:id>', TemplateView.as_view(template_name='dashboard/edit_incomesource.html'), name='edit_income_sources_list'),
-    path('income_source/add/', TemplateView.as_view(template_name='dashboard/add_incomesource.html'), name='add_income_source'),
+    path('income_sources/', TemplateView.as_view(template_name='dashboard/incomesource.html'), name='income_sources_list'),
+    path('income_sources/edit/<int:id>', TemplateView.as_view(template_name='dashboard/edit_incomesource.html'), name='edit_income_sources_list'),
+    path('income_sources/add/', TemplateView.as_view(template_name='dashboard/add_incomesource.html'), name='add_income_source'),
     path('transaction/',TemplateView.as_view(template_name='dashboard/transaction.html'), name='transaction'),
     path('transaction/add/',TemplateView.as_view(template_name='dashboard/add_transaction.html'), name='transaction_add'),
     path('budget/',TemplateView.as_view(template_name='dashboard/budget_goal.html'), name='budget_goal'),

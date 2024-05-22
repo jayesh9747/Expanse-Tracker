@@ -1,112 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Income Source Management</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f6fa;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        table {
-            width: 90%;
-            max-width: 1200px;
-            border-collapse: collapse;
-            margin: 20px 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background: #ffffff;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        thead {
-            background: #3498db;
-            color: #ffffff;
-        }
-        th, td {
-            padding: 15px;
-            text-align: left;
-        }
-        th {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background: #f2f2f2;
-        }
-        .btn {
-            padding: 10px 20px;
-            background: #3498db;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        .btn:hover {
-            background: #2980b9;
-        }
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .icon-btn img {
-            width: 20px;
-            height: 20px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f6fa;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      table {
+        width: 90%;
+        max-width: 1200px;
+        border-collapse: collapse;
+        margin: 20px 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      thead {
+        background: #3498db;
+        color: #ffffff;
+      }
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+      }
+      th {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      tr:nth-child(even) {
+        background: #f2f2f2;
+      }
+      .btn {
+        padding: 10px 20px;
+        background: #3498db;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background: #2980b9;
+      }
+      .icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .icon-btn img {
+        width: 20px;
+        height: 20px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Income Source Management</h1>
-    <button onclick="location.href='https://fj-be-r2.onrender.com/income_sources/add'" class="btn">Add New Income Source</button>
+    <button
+      onclick="location.href='https://fj-be-r2.onrender.com/income_sources/add'"
+      class="btn"
+    >
+      Add New Income Source
+    </button>
     <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Total Amount</th>
-                <th>Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="income-sources-container">
-        </tbody>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Total Amount</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="income-sources-container"></tbody>
     </table>
 
     <script>
-        const apiUrl = 'https://fj-be-r2.onrender.com/api/income_sources/';
-        
-        async function fetchIncomeSources() {
-            try {
-                const response = await fetch(apiUrl);
+      const apiUrl = "https://fj-be-r2.onrender.com/api/income_sources/";
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const incomeSources = await response.json();
-                displayIncomeSources(incomeSources);
-            } catch (error) {
-                console.error('Fetch error:', error);
-            }
+      async function fetchIncomeSources() {
+        try {
+          const response = await fetch(apiUrl);
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const incomeSources = await response.json();
+          displayIncomeSources(incomeSources);
+        } catch (error) {
+          console.error("Fetch error:", error);
         }
+      }
 
-        function displayIncomeSources(incomeSources) {
-            const container = document.getElementById('income-sources-container');
-            container.innerHTML = '';
+      function displayIncomeSources(incomeSources) {
+        const container = document.getElementById("income-sources-container");
+        container.innerHTML = "";
 
-            incomeSources.forEach(source => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+        incomeSources.forEach((source) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
                     <td>${source.title}</td>
                     <td>${source.total_amount}</td>
                     <td>${source.date}</td>
@@ -119,56 +124,60 @@
                         </button>
                     </td>
                 `;
-                container.appendChild(row);
+          container.appendChild(row);
+        });
+      }
+
+      function editIncomeSource(id) {
+        window.location.href = `/income_sources/edit/${id}`;
+      }
+
+      async function deleteIncomeSource(id) {
+        if (confirm("Are you sure you want to delete this income source?")) {
+          try {
+            const response = await fetch(`${apiUrl}${id}/`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+              },
+              credentials: "include",
             });
-        }
-
-        function editIncomeSource(id) {
-            window.location.href = `/income_source/edit/${id}`;
-        }
-
-        async function deleteIncomeSource(id) {
-            if (confirm('Are you sure you want to delete this income source?')) {
-                try {
-                    const response = await fetch(`${apiUrl}${id}/`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken')
-                        },
-                        credentials: 'include'
-                    });
-                    console.log(response);
-                    if (response.ok) {
-                        fetchIncomeSources();
-                    } else {
-                        const errorData = await response.json();
-                        alert('Failed to delete income source: ' + JSON.stringify(errorData));
-                        console.error('Delete error:', errorData);
-                    }
-                } catch (error) {
-                    alert('Failed to delete income source: ' + error.message);
-                    console.error('Delete error:', error);
-                }
+            console.log(response);
+            if (response.ok) {
+              fetchIncomeSources();
+            } else {
+              const errorData = await response.json();
+              alert(
+                "Failed to delete income source: " + JSON.stringify(errorData)
+              );
+              console.error("Delete error:", errorData);
             }
+          } catch (error) {
+            alert("Failed to delete income source: " + error.message);
+            console.error("Delete error:", error);
+          }
         }
+      }
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
             }
-            return cookieValue;
+          }
         }
+        return cookieValue;
+      }
 
-        document.addEventListener('DOMContentLoaded', fetchIncomeSources);
+      document.addEventListener("DOMContentLoaded", fetchIncomeSources);
     </script>
-</body>
+  </body>
 </html>
