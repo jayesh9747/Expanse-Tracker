@@ -20,7 +20,8 @@ SECRET_KEY = 'django-insecure-n-mi#eo6@a)&p)y-ho(34$v=d*(6)ttd17fg(8@9uc0o9*5zw&
 DEBUG =  os.getenv("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
-
+ 
+PORT = 8000 
 
 # Application definition
 
