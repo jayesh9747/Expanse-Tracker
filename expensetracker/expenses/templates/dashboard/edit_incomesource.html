@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Income Source</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Income Source</h1>
+    <form id="edit-income-source-form">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="total_amount">Total Amount</label>
+            <input type="number" id="total_amount" name="total_amount" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        <button type="submit" class="btn">Update Income Source</button>
+    </form>
+
+    <script>
+        const apiUrl = 'http://localhost:8000/api/income_sources/';
+        const urlParams = new URLSearchParams(window.location.search);
+        const incomeSourceId = urlParams.get('id');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchIncomeSource(incomeSourceId);
+            document.getElementById('edit-income-source-form').addEventListener('submit', updateIncomeSource);
+        });
+
+        async function fetchIncomeSource(id) {
+            try {
+                const response = await fetch(`${apiUrl}${id}/`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const incomeSource = await response.json();
+                document.getElementById('title').value = incomeSource.title;
+                document.getElementById('total_amount').value = incomeSource.total_amount;
+                document.getElementById('date').value = incomeSource.date;
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        async function updateIncomeSource(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const total_amount = document.getElementById('total_amount').value;
+            const date = document.getElementById('date').value;
+            
+            try {
+                const response = await fetch(`${apiUrl}${incomeSourceId}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ title, total_amount, date })
+                });
+                if (response.ok) {
+                    window.location.href = 'http://localhost:8000/income_sources/';
+                } else {
+                    const errorData = await response.json();
+                    alert('Failed to update income source: ' + JSON.stringify(errorData));
+                    console.error('Update error:', errorData);
+                }
+            } catch (error) {
+                alert('Failed to update income source: ' + error.message);
+                console.error('Update error:', error);
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

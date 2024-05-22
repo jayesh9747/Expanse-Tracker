@@ -1,0 +1,8 @@
+.env 
+dalgoenv/
+__pycache__/
+*.pyc
+**/migrations/*.pyc
+venv/
+downloads/
+*history

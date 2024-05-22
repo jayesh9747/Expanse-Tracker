@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+python-dotenv = "*"
+django-allauth = "*"
+psycopg2 = "*"
+requests = "*"
+djangorestframework = "*"
+pylint-django = "*"
+python-dateutil = "*"
+sendgrid = "*"
+drf-nested-routers = "*"
+pillow = "*"
+cloudinary = "*"
+django-cloudinary-storage = "*"
+psycopg2-binary = "*"
+django-allauth-ui = "*"
+django-widget-tweaks = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

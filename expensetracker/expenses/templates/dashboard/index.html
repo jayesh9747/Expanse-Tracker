@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between; 
+        }
+
+        .nav-items {
+            list-style-type: none;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .nav-item:hover {
+            background-color: #555;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: fixed;
+            right: 0;
+            background-color: #444;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center
+        }
+
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .account-circle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+        }
+
+        .account-circle img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .account-name {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="left">
+            <a href="#" class="nav-item">Personal Finance Tracker</a> <!-- Placed on the left side -->
+        </div>
+        <div class="right">
+            <ul class="nav-items">
+                {% if user.is_authenticated %}
+                    <li class="dropdown">
+                        <div class="account-circle">
+                            <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="User Avatar">
+                            <span class="account-name">{{ user.username }}</span>
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="/profile">Profile</a>
+                            <a href="{% url 'account_logout' %}">Logout</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'account_login' %}" class="nav-item">Login</a></li>
+                    <li><a href="{% url 'account_signup' %}" class="nav-item">Sign up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}
+        <!-- Default content can go here -->
+        {% endblock %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const accountCircle = document.querySelector('.account-circle');
+            const dropdownContent = document.querySelector('.dropdown-content');
+
+            if (accountCircle) {
+                accountCircle.addEventListener('click', function(event) {
+                    dropdownContent.classList.toggle('show');
+                    event.stopPropagation();
+                });
+
+                window.addEventListener('click', function() {
+                    if (dropdownContent.classList.contains('show')) {
+                        dropdownContent.classList.remove('show');
+                    }
+                });
+
+                dropdownContent.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

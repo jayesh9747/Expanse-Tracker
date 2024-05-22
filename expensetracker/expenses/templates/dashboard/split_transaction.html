@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Split Transaction</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f6fa;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-container {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 800px; /* Adjust width as needed */
+      }
+      .form-container h2 {
+        margin-top: 0;
+        color: #2c3e50;
+      }
+      .form-container label {
+        display: block;
+        margin: 10px 0 5px;
+        color: #34495e;
+      }
+      .form-container select,
+      .form-container input {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .btn {
+        padding: 10px 20px;
+        background: #3498db;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background: #2980b9;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center; /* Center align the text content */
+      }
+
+      th {
+        background-color: #3498db;
+        color: white;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="form-container">
+      <h2>Split Transaction</h2>
+      <h3>Split Transaction Form:</h3>
+      <form id="split-form">
+        <label for="user">User:</label>
+        <select id="user" name="user_id" required></select>
+
+        <label for="amount_owed">Amount Owed:</label>
+        <input
+          type="number"
+          step="0.01"
+          id="amount_owed"
+          name="amount_owed"
+          required
+        />
+
+        <button type="submit" class="btn">Split Transaction</button>
+      </form>
+
+      <h3>Transaction Details:</h3>
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Total Amount</th>
+          <th>Remaining Amount</th>
+        </tr>
+        <tr>
+          <td id="transaction-date"></td>
+          <td id="total-amount"></td>
+          <td id="remaining-amount"></td>
+        </tr>
+      </table>
+
+      <h3>Existing Split Amounts:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Amount Owed</th>
+          </tr>
+        </thead>
+        <tbody id="existing-splits"></tbody>
+      </table>
+    </div>
+
+    <script>
+      const usersApiUrl = "http://localhost:8000/api/users/";
+      const transactionId = window.location.pathname.split("/")[2];
+      const transactionApiUrl = `http://localhost:8000/api/transactions/${transactionId}/`;
+      const splitApiUrl = `http://localhost:8000/api/transactions/${transactionId}/splits/`;
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await fetchTransactionDetails();
+        await fetchUsers();
+        await fetchExistingSplits();
+
+        document
+          .getElementById("split-form")
+          .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const user = formData.get("user_id");
+            const amount_owed = parseFloat(formData.get("amount_owed"));
+
+            const splitData = {
+              user: user,
+              amount_owed: amount_owed,
+            };
+
+            try {
+              const response = await fetch(splitApiUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRFToken": getCookie("csrftoken"),
+                },
+                credentials: "include",
+                body: JSON.stringify(splitData),
+              });
+
+              if (response.ok) {
+                alert("Transaction split successfully");
+                window.location.reload();
+              } else {
+                const errorData = await response.json();
+                alert(
+                  "Failed to split transaction: " + JSON.stringify(errorData)
+                );
+                console.error("Split error:", errorData);
+              }
+            } catch (error) {
+              alert("Failed to split transaction: " + error.message);
+              console.error("Split error:", error);
+            }
+          });
+      });
+      async function fetchTransactionDetails() {
+        try {
+          const response = await fetch(transactionApiUrl);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const transaction = await response.json();
+          document.getElementById("transaction-date").textContent =
+            transaction.date;
+          document.getElementById("total-amount").textContent =
+            transaction.amount;
+          document.getElementById("remaining-amount").textContent =
+            transaction.remaining_amount;
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      }
+
+      async function fetchUsers() {
+        try {
+          const response = await fetch(usersApiUrl);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const users = await response.json();
+          const userSelect = document.getElementById("user");
+          users.forEach((user) => {
+            const option = document.createElement("option");
+            option.value = user.id;
+            option.textContent = user.username;
+            userSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      }
+
+      async function fetchExistingSplits() {
+        try {
+          const response = await fetch(splitApiUrl);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const splits = await response.json();
+          const existingSplits = document.getElementById("existing-splits");
+          splits.forEach((split) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                      <td>${split.user}</td>
+                      <td>${split.amount_owed}</td>
+                  `;
+            existingSplits.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      }
+
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+  </body>
+</html>
