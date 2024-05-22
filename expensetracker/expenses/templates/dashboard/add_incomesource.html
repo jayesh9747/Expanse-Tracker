@@ -73,7 +73,7 @@
     </div>
 
     <script>
-        const apiUrl = 'http://localhost:8000/api/income_sources/';
+        const apiUrl = 'https://fj-be-r2.onrender.com/api/income_sources/';
 
         document.getElementById('income-source-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -92,7 +92,7 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = 'http://localhost:8000/income_sources';  // Redirect to the main page
+                    window.location.href = 'https://fj-be-r2.onrender.com/income_sources';  // Redirect to the main page
                 } else {
                     const errorData = await response.json();
                     alert('Failed to add income source: ' + JSON.stringify(errorData));

@@ -86,7 +86,7 @@
     </div>
 
     <script>
-        const apiUrl = 'http://localhost:8000/api/transactions/';
+        const apiUrl = 'https://fj-be-r2.onrender.com/api/transactions/';
 
         document.addEventListener('DOMContentLoaded', () => {
             const transactionId = window.location.pathname.split('/').slice(-2, -1)[0];
@@ -109,7 +109,7 @@
                     });
 
                     if (response.ok) {
-                        window.location.href = 'http://localhost:8000/transaction';  // Redirect to the main page
+                        window.location.href = 'https://fj-be-r2.onrender.com/transaction';  // Redirect to the main page
                     } else {
                         const errorData = await response.json();
                         alert('Failed to update transaction: ' + JSON.stringify(errorData));

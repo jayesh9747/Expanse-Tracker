@@ -88,7 +88,7 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('http://localhost:8000/api/profile/')
+            fetch('https://fj-be-r2.onrender.com/api/profile/')
                 .then(response => response.json())
                 .then(data => {
                     console.log('Profile data:', data);
@@ -106,7 +106,7 @@
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
                 const formData = new FormData(form);
-                fetch('http://localhost:8000/api/profile/', {
+                fetch('https://fj-be-r2.onrender.com/api/profile/', {
                     method: 'POST',
                     body: formData,
                     headers: {

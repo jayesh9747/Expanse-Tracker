@@ -82,7 +82,7 @@
     </div>
 
     <script>
-        const apiUrl = 'http://localhost:8000/api/budget/';
+        const apiUrl = 'https://fj-be-r2.onrender.com/api/budget/';
 
         document.getElementById('budget-goal-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -101,7 +101,7 @@
                 });
 
                 if (response.ok) {
-                    window.location.href = 'http://localhost:8000/budget/';  
+                    window.location.href = 'https://fj-be-r2.onrender.com/budget/';  
                 } else {
                     const errorData = await response.json();
                     alert('Failed to add budget goal: ' + JSON.stringify(errorData));

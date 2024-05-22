@@ -73,7 +73,7 @@
     </form>
 
     <script>
-        const apiUrl = 'http://localhost:8000/api/income_sources/';
+        const apiUrl = 'https://fj-be-r2.onrender.com/api/income_sources/';
         const urlParams = new URLSearchParams(window.location.search);
         const incomeSourceId = urlParams.get('id');
         
@@ -114,7 +114,7 @@
                     body: JSON.stringify({ title, total_amount, date })
                 });
                 if (response.ok) {
-                    window.location.href = 'http://localhost:8000/income_sources/';
+                    window.location.href = 'https://fj-be-r2.onrender.com/income_sources/';
                 } else {
                     const errorData = await response.json();
                     alert('Failed to update income source: ' + JSON.stringify(errorData));

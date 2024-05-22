@@ -125,7 +125,7 @@
     }
 
     function fetchTransactionReport(month, year) {
-      const url = `http://localhost:8000/api/transactions/report/${year}/${month}/`;
+      const url = `https://fj-be-r2.onrender.com/api/transactions/report/${year}/${month}/`;
 
       return fetch(url)
         .then(response => {

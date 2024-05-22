@@ -123,10 +123,10 @@
     </div>
 
     <script>
-      const usersApiUrl = "http://localhost:8000/api/users/";
+      const usersApiUrl = "https://fj-be-r2.onrender.com/api/users/";
       const transactionId = window.location.pathname.split("/")[2];
-      const transactionApiUrl = `http://localhost:8000/api/transactions/${transactionId}/`;
-      const splitApiUrl = `http://localhost:8000/api/transactions/${transactionId}/splits/`;
+      const transactionApiUrl = `https://fj-be-r2.onrender.com/api/transactions/${transactionId}/`;
+      const splitApiUrl = `https://fj-be-r2.onrender.com/api/transactions/${transactionId}/splits/`;
 
       document.addEventListener("DOMContentLoaded", async () => {
         await fetchTransactionDetails();
