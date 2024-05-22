@@ -101,12 +101,7 @@ Replace `<repository-url>` with the actual URL of your repository. This `README.
 
 
 ```
-## Demo vedio
 
-https://github.com/jayesh9747/FJ-BE-R2/assets/123955234/d3c36c61-1362-451b-b382-4ff7d6e2e047
-
-
-https://github.com/jayesh9747/FJ-BE-R2/assets/123955234/87acaa13-761d-45f6-ae82-e20e395bd7ee
 
 
 
