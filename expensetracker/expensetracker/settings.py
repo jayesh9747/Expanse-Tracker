@@ -23,6 +23,8 @@ ALLOWED_HOSTS = ["*"]
  
 PORT = 8000 
 
+HOST = '0.0.0.0'
+
 # Application definition
 
 INSTALLED_APPS = [
