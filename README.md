@@ -5,9 +5,9 @@
 ## Setup Instructions
 
 Follow these steps to set up and run the ExpenseTracker Django application.
-
+```
 ### 1. Clone the Repository
-
+```
 git clone <repository-url>
 cd expensetracker
 ```
